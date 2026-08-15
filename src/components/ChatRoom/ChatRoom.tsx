@@ -178,6 +178,7 @@ export function ChatRoom({ roomId, onBack }: ChatRoomProps) {
 
     let disposed = false;
     let unsubMemberJoined: (() => void) | null = null;
+    let presenceHeartbeat: ReturnType<typeof setInterval> | null = null;
 
     const init = async () => {
       setLoading(true);
@@ -324,6 +325,17 @@ export function ChatRoom({ roomId, onBack }: ChatRoomProps) {
           console.warn("[ChatRoom] 加入广播失败（将由 Offer 重试恢复）:", e);
         }
 
+        // 兼容仍停留在旧构建、尚未使用 Supabase Presence 的客户端，同时覆盖
+        // WebSocket 短暂重连时错过单次 Broadcast 的情况。已连接的 DataChannel
+        // 会在 autoConnectIfNeeded 中直接跳过，不会反复协商。
+        presenceHeartbeat = setInterval(() => {
+          if (signaling.getState() !== "joined") return;
+          void Promise.allSettled([
+            signaling.requestPresence(),
+            signaling.broadcastJoined(),
+          ]);
+        }, 15_000);
+
         // 6. 设置离线签名器（用于后续 send 时暂存离线消息）
         OfflineMessageStore.setSigner(
           (msgText, addr) =>
@@ -412,6 +424,7 @@ export function ChatRoom({ roomId, onBack }: ChatRoomProps) {
 
     return () => {
       disposed = true;
+      if (presenceHeartbeat) clearInterval(presenceHeartbeat);
       unsubMemberJoined?.();
       void webrtcRef.current?.stop();
       void signalingRef.current?.leave();

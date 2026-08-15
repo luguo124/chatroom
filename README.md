@@ -147,4 +147,3 @@ MonadChat 是一款运行于 Monad 区块链之上的私密通讯产品。用户
 
 - 合约地址（Monad Testnet）：[0xe3D77b1Cc34B922351EBB9Fe1567f86E4F0abc05](https://testnet.monadscan.com/address/0xe3D77b1Cc34B922351EBB9Fe1567f86E4F0abc05)
 - 技术栈：React 19 · TypeScript 5.8 · viem 2.40 · @supabase/supabase-js 2 · Dexie.js 4 · Zustand 5 · Vite 7 · Foundry（合约）
-- 部署方案：详见 [DEPLOY.md](file:///Users/li/Downloads/Chat%20room/MonadChat/DEPLOY.md)
