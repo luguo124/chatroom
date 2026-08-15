@@ -1,0 +1,28 @@
+# ============================================================
+# Cloudflare Pages _headers
+# MonadChat — WebRTC + E2EE + 区块链钱包 + Supabase
+# ============================================================
+
+# --- SPA 全局安全头（所有 HTML/JSON/JS/CSS） ---
+/*
+  # CSP：允许 MetaMask 内联、Supabase API、Metered TURN、Monad RPC、iframe 注入
+  Content-Security-Policy: default-src 'self'; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.monad.xyz https://*.metered.ca https://*.infura.io https://*.alchemy.com https://rpc-mainnet.monadinfra.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval'; img-src 'self' data: blob: https:; font-src 'self' data:; frame-src https:; object-src 'none'; base-uri 'self'; form-action 'self'
+
+  # 防止点击劫持
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+
+  # WebRTC 需要跨域隔离（可选：开启后某些浏览器会更安全，但会影响第三方 iframe）
+  # Cross-Origin-Opener-Policy: same-origin
+  # Cross-Origin-Embedder-Policy: require-corp
+
+# --- 静态资源长缓存（Vite 生成带 hash 的文件名） ---
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# --- HTML 不缓存（保证每次访问拿最新） ---
+/*.html
+  Cache-Control: no-cache, no-store, must-revalidate
+  Expires: 0

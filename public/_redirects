@@ -1,0 +1,7 @@
+# ============================================================
+# Cloudflare Pages _redirects
+# MonadChat SPA 路由回退（React Router / Hash Router 都兼容）
+# ============================================================
+
+# 所有未匹配的路径回退到 index.html（SPA 路由）
+/*    /index.html   200
