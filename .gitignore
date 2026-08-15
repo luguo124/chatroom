@@ -11,6 +11,11 @@ dist
 dist-ssr
 *.local
 
+# Foundry build outputs
+/contracts/cache/
+/contracts/out/
+/contracts/broadcast/
+
 # Environment variables (含敏感密钥，禁止提交)
 .env
 .env.local
